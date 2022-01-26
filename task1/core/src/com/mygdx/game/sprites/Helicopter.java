@@ -3,6 +3,7 @@ package com.mygdx.game.sprites;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -10,48 +11,38 @@ public class Helicopter {
     private static final int MOVEMENT_SPEED = 150;
     private Vector2 position;
     private Texture heli;
+    private Texture flippedHeli;
+    private TextureRegion heliTextureRegion;
+    private TextureRegion flippedHeliTextureRegion;
     private Vector2 velocity;
-    private Sprite heliSprite;
+    //private Sprite heliSprite;
     private Rectangle screenBounds;
+    private Sprite sprite;
 
     public Helicopter(int x, int y) {
         position = new Vector2(x,y);
         heli = new Texture("attackhelicopter.PNG");
-        heliSprite  = new Sprite(heli);
+        //flippedHeli = new Texture("flippedattackhelicopter.png");
+        heliTextureRegion = new TextureRegion(heli,0,0, heli.getWidth(), heli.getHeight());
+        //flippedHeliTextureRegion = new TextureRegion(flippedHeli, 0,0, heli.getWidth(), heli.getHeight());
+        sprite = new Sprite(heli, -heli.getWidth(), heli.getHeight());
         screenBounds = new Rectangle(0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
     }
 
-    private boolean changeDirectionVertical = false;
-    private boolean changeDirectionHorizonal = false;
     private int movementVertical = MOVEMENT_SPEED;
     private int movementHorizontal = MOVEMENT_SPEED;
     public void update(float dt) {
-       /* velocity.add(MOVEMENT_SPEED, 0);
-        velocity.scl(dt);
-        position.add(velocity.x, 0);
-        velocity.scl(1/dt);
-
-        */
         if((position.x + heli.getWidth()) > (screenBounds.x + screenBounds.width) || position.x < 0) {
-            movementVertical = movementVertical *-1;
-            heliSprite.flip(true, false);
+            movementHorizontal = movementHorizontal *-1;
 
         }
 
         if ((position.y + heli.getHeight()) > (screenBounds.y + screenBounds.height) || position.y < 0) {
-            movementHorizontal = movementHorizontal *-1;
+            movementVertical = movementVertical *-1;
+
         }
 
-        //int a = 5 + (int)(Math.random() * ((100 - 50) + 1));
-        //int b = 5 + (int)(Math.random() * ((100 - 50) + 1));
-
-
-        position.add(movementVertical *dt, movementHorizontal *dt);
-
-
-
-        //System.out.printf("heliX: " + position.x + " heliY: " + position.y);
-        //System.out.printf(" screen edges: [" + screenBounds.x + " " + screenBounds.y + " " + (screenBounds.x + screenBounds.width) + " " + (screenBounds.y + screenBounds.height) + " direction: " + changedDirection + ". " );
+        position.add(movementHorizontal *dt, movementVertical *dt);
 
     }
 
@@ -60,9 +51,23 @@ public class Helicopter {
     }
 
     public Texture getTexture() {
+        /*
+        if(movementVertical<0){
+            return heliTextureRegion.getTexture();
+        } else {
+            sprite.flip(true,true );
+            return sprite.getTexture();
+            //return flippedHeliTextureRegion.getTexture();
+        }
 
-        return heliSprite.getTexture();
+         */
+        return heliTextureRegion.getTexture();
     }
+
+    public int getMovementHorizontal() {
+        return this.movementHorizontal;
+    }
+
 
     public void dispose() {
         heli.dispose();
