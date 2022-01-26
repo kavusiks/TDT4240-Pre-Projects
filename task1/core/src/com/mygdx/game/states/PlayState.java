@@ -39,7 +39,6 @@ public class PlayState extends State{
     public void update(float dt) {
         handleInput();
         heli.update(dt);
-        cam.position.x = heli.getPosition().x+80;
 
 
         cam.update();
