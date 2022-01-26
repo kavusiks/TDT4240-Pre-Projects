@@ -3,6 +3,7 @@ package com.mygdx.game.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -14,6 +15,7 @@ public class PlayState extends State{
 
     private Helicopter heli;
     private Texture bg;
+
 
     protected PlayState(GameStateManager gsm) {
         super(gsm);
@@ -48,11 +50,15 @@ public class PlayState extends State{
 
     @Override
     public void render(SpriteBatch sb) {
+        BitmapFont font = new BitmapFont();
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         sb.draw(bg, cam.position.x - (cam.viewportWidth/2), 0);
         //sb.draw(heli.getTexture(), heli.getMovementHorizontal()>0 ? heli.getPosition().x + heli.getTexture().getWidth() : heli.getPosition().x ,heli.getPosition().y, heli.getMovementHorizontal()>0 ? -heli.getTexture().getWidth():heli.getTexture().getWidth(), heli.getTexture().getHeight());
         sb.draw(heli.getTexture(), heli.getPosition().x, heli.getPosition().y);
+
+        font.draw(sb, "Position: ", 5,MyGdxGame.HEIGHT-5);
+        font.draw(sb, "x:  "+heli.getPosition().x + " y: " + heli.getPosition().y, 5,MyGdxGame.HEIGHT-25);
         sb.end();
 
     }
