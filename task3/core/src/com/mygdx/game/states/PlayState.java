@@ -15,11 +15,15 @@ public class PlayState extends State{
     private static final int GROUND_Y_OFFSET = -85;
 
     private Helicopter heli;
+    private Helicopter heli2;
     private Texture bg;
 
     protected PlayState(GameStateManager gsm) {
         super(gsm);
-        heli = new Helicopter(50,200);
+        heli = new Helicopter(220, 350);
+        heli2 = new Helicopter(10,50);
+        System.out.println(heli2.getTexture().getRegionWidth());
+        System.out.println(heli2.getTexture().getRegionHeight());
         cam.setToOrtho(false, MyGdxGame.WIDTH, MyGdxGame.HEIGHT);
         bg = new Texture("bg.png");
 
@@ -40,7 +44,13 @@ public class PlayState extends State{
     public void update(float dt) {
         handleInput();
         heli.update(dt);
+        heli2.update(dt);
 
+        if(heli.isColliding(heli2)) {
+            System.out.println("collided: Heli1: " + heli.getPosition() + " Heli2: " + heli2.getPosition());
+            heli.hasCollided();
+            heli2.hasCollided();
+        }
 
         cam.update();
 
@@ -52,6 +62,8 @@ public class PlayState extends State{
         sb.begin();
         sb.draw(bg, cam.position.x - (cam.viewportWidth/2), 0);
         sb.draw(heli.getTexture(), heli.getMovementHorizontal()>0 ? heli.getPosition().x + heli.getTexture().getRegionWidth() : heli.getPosition().x ,heli.getPosition().y, heli.getMovementHorizontal()>0 ? -heli.getTexture().getRegionWidth():heli.getTexture().getRegionWidth(), heli.getTexture().getRegionHeight());
+        sb.draw(heli2.getTexture(), heli2.getMovementHorizontal()>0 ? heli2.getPosition().x + heli2.getTexture().getRegionWidth() : heli2.getPosition().x ,heli2.getPosition().y, heli2.getMovementHorizontal()>0 ? -heli2.getTexture().getRegionWidth():heli2.getTexture().getRegionWidth(), heli2.getTexture().getRegionHeight());
+
         sb.end();
 
     }
