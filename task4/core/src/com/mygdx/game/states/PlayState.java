@@ -3,14 +3,20 @@ package com.mygdx.game.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.MyGdxGame;
+import com.mygdx.game.sprites.AbstractPlayer;
 import com.mygdx.game.sprites.Ball;
 import com.mygdx.game.sprites.PlayerOne;
 import com.mygdx.game.sprites.PlayerTwo;
+
+import javax.swing.AbstractButton;
+import javax.swing.text.View;
 
 public class PlayState extends State{
     private static final int PLAY_BUTTON_X = 325;
@@ -20,6 +26,7 @@ public class PlayState extends State{
     private PlayerOne player1;
     private PlayerTwo player2;
     private Ball ball;
+    private String winText;
 
 
     protected PlayState(GameStateManager gsm) {
@@ -71,13 +78,17 @@ public class PlayState extends State{
         if(ball.detectPlayerLoss(player2)) {
             player1.addWinPoints();
             ball.pauseBall();
-            gsm.push(new PauseState(gsm));
+            if(player1.getWinPoints()!=21)  gsm.push(new PauseState(gsm, this));
         }
 
         if(ball.detectPlayerLoss(player1)) {
             player2.addWinPoints();
             ball.pauseBall();
-            gsm.push(new PauseState(gsm));
+            if(player2.getWinPoints()!=21) gsm.push(new PauseState(gsm, this));
+        }
+        if (player2.getWinPoints() == 21 || player1.getWinPoints() ==21) {
+            ball.pauseBall();
+            winText = player1.getWinPoints() == 21 ? "Player 1" : "Player 2" + " won the game. Restart to play again.";
         }
 
 
@@ -85,8 +96,13 @@ public class PlayState extends State{
 
     }
 
+    public void fireGameResumed() {
+        ball.restartBall();
+    }
+
     @Override
     public void render(SpriteBatch sb) {
+        BitmapFont font = new BitmapFont();
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
         //sb.draw(bg, cam.position.x - (cam.viewportWidth/2), 0);
@@ -98,10 +114,20 @@ public class PlayState extends State{
         //sb.draw(heli2.getTexture(), heli2.getMovementHorizontal()>0 ? heli2.getPosition().x + heli2.getTexture().getRegionWidth() : heli2.getPosition().x ,heli2.getPosition().y, heli2.getMovementHorizontal()>0 ? -heli2.getTexture().getRegionWidth():heli2.getTexture().getRegionWidth(), heli2.getTexture().getRegionHeight());
         //sb.draw(heli3.getTexture(), heli3.getMovementHorizontal()>0 ? heli3.getPosition().x + heli3.getTexture().getRegionWidth() : heli3.getPosition().x ,heli3.getPosition().y, heli3.getMovementHorizontal()>0 ? -heli3.getTexture().getRegionWidth():heli3.getTexture().getRegionWidth(), heli3.getTexture().getRegionHeight());
 
+        sb.setProjectionMatrix(cam.combined); //or your matrix to draw GAME WORLD, not UI
+
+
+
+        font.setColor(Color.YELLOW);
+        font.draw(sb, "Points: " + String.valueOf(player1.getWinPoints()), player1.getPosition().x, MyGdxGame.HEIGHT-50);
+        font.draw(sb, "Points: " + String.valueOf(player2.getWinPoints()), player2.getPosition().x-60, MyGdxGame.HEIGHT-50);
+        if(winText != null) font.draw(sb, winText,MyGdxGame.WIDTH/2 - 150, MyGdxGame.HEIGHT/2+ 20);
+
 
         sb.end();
 
     }
+
 
     @Override
     public void dispose() {

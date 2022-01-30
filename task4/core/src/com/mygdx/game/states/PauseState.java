@@ -7,22 +7,26 @@ import com.mygdx.game.MyGdxGame;
 
 public class PauseState extends State {
     private Texture playBtn;
+    private PlayState observingPlayState;
 
 
-    public PauseState(GameStateManager gsm) {
+    public PauseState(GameStateManager gsm, PlayState ps) {
         super(gsm);
         playBtn = new Texture("playbtn.png");
+        observingPlayState = ps;
     }
 
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
             gsm.pop();
+            observingPlayState.fireGameResumed();
         }
     }
 
     @Override
     public void update(float dt) {
+        handleInput();
 
     }
 
@@ -38,6 +42,6 @@ public class PauseState extends State {
     @Override
     public void dispose() {
         playBtn.dispose();
-        System.out.println("Menu State Disposed");
+        System.out.println("Pause State Disposed");
     }
 }

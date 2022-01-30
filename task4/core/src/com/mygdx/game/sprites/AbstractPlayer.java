@@ -18,6 +18,7 @@ public class AbstractPlayer {
     public AbstractPlayer(int x, int y) {
         player = getTexture();
         position = new Vector2(x,y-PLAYER_HEIGHT/2);
+        winPoints = 0;
     }
 
     private Pixmap getPixmapRectangle(int width, int height){
