@@ -1,16 +1,15 @@
 package com.mygdx.game.states;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.MyGdxGame;
 
-public class MenuState extends State{
-
+public class PauseState extends State {
     private Texture playBtn;
 
-    public MenuState(GameStateManager gsm) {
+
+    public PauseState(GameStateManager gsm) {
         super(gsm);
         playBtn = new Texture("playbtn.png");
     }
@@ -18,13 +17,13 @@ public class MenuState extends State{
     @Override
     protected void handleInput() {
         if(Gdx.input.justTouched()) {
-            gsm.set(new PlayState(gsm));
+            gsm.pop();
         }
     }
 
     @Override
     public void update(float dt) {
-        handleInput();
+
     }
 
     @Override
@@ -38,7 +37,6 @@ public class MenuState extends State{
 
     @Override
     public void dispose() {
-        //background.dispose();
         playBtn.dispose();
         System.out.println("Menu State Disposed");
     }

@@ -3,6 +3,7 @@ package com.mygdx.game.sprites;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.MyGdxGame;
 
@@ -12,6 +13,7 @@ public class AbstractPlayer {
     private static final int PLAYER_WIDTH = 5;
     private Vector2 position;
     private Texture player;
+    private int winPoints;
 
     public AbstractPlayer(int x, int y) {
         player = getTexture();
@@ -23,6 +25,14 @@ public class AbstractPlayer {
         pixmap.setColor(PLAYER_COLOR);
         pixmap.fillRectangle(0,0, pixmap.getWidth(), pixmap.getHeight());
         return pixmap;
+    }
+
+    public int getWinPoints(){
+        return this.winPoints;
+    }
+
+    public void addWinPoints() {
+        this.winPoints +=1;
     }
 
     public Texture getTexture() {
@@ -37,6 +47,10 @@ public class AbstractPlayer {
         if(position.y< MyGdxGame.HEIGHT-getTexture().getHeight()) {
             position.y += 5;
         }
+    }
+
+    public Rectangle getObjectBounds() {
+        return new Rectangle(this.getPosition().x, this.getPosition().y, this.getTexture().getWidth(), this.getTexture().getHeight());
     }
 
     public void moveDownWards() {
