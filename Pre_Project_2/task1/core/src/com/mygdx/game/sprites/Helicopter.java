@@ -18,6 +18,7 @@ public class Helicopter {
     private int movementVertical;
     private int movementHorizontal;
 
+    //Used to implement only one instance - Singleton pattern
     private static Helicopter INSTANCE;
 
     private Helicopter() {
@@ -29,10 +30,10 @@ public class Helicopter {
         screenBounds = new Rectangle(0, 0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight() );
     }
 
+    //used to get the one and only implemented Helicopter instance - Singelton pattern
     public static Helicopter getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new Helicopter();
-            System.out.println("INSTANCE VREATER");
         }
         return INSTANCE;
     }
